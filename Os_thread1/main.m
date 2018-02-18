@@ -7,11 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "thread.h"
+
 
 int main(int argc, const char * argv[]) {
+    
+    
+    MyClass_thread  *woteczki = [[MyClass_thread alloc] init];
+    
+        
     @autoreleasepool {
         // insert code here...
-        NSLog(@"Hello, World!");
+        NSLog(@"Hello, World of threads!");
+        
+        while(1){
+             
+        }
+        
     }
     return 0;
 }
