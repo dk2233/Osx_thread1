@@ -208,6 +208,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -236,7 +237,7 @@
 				65EAEDA120399C1F007C7A2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		65EAEDA220399C1F007C7A2F /* Build configuration list for PBXNativeTarget "Os_thread1" */ = {
 			isa = XCConfigurationList;
@@ -245,7 +246,7 @@
 				65EAEDA420399C1F007C7A2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
