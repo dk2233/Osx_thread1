@@ -16,8 +16,11 @@
 -(id)init{
     
     _seconds = 0;
-    _DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_IN_SECONDS * NSEC_PER_SEC));
+    //_DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_IN_SECONDS * NSEC_PER_SEC));
+    [self ShowSecondsDuringWaiting];
     [NSThread detachNewThreadSelector:@selector(WriteSthg) toTarget:self withObject:self];
+    
+
     return self;
     
 }
@@ -26,18 +29,28 @@
     //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"hello");
     
-    [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)7.0]];
+    //[NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)7.0]];
     
+    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
+                   , dispatch_get_main_queue(),
+                   ^{
+                       NSLog(@"hello2");
+                       
+                   });
     
-    NSLog(@"hello2");
     //[NSThread exit];
     //[pool realese];
 }
 
 -(void)ShowSecondsDuringWaiting{
-    self.seconds += 1;
+    
     NSLog(@"now is %d seconds ",_seconds);
-    _DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((DELAY_IN_SECONDS +_seconds) * NSEC_PER_SEC));
+    _DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((DELAY_IN_SECONDS) * NSEC_PER_SEC));
+    //NSLog(@"%lld",_DelayTime);
+    dispatch_after(_DelayTime, dispatch_get_main_queue(), ^{
+        [self ShowSecondsDuringWaiting];
+    });
+    self.seconds += 1;
 }
 
 
