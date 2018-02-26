@@ -29,14 +29,14 @@
     //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"hello");
     
-    //[NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)7.0]];
-    
-    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
-                   , dispatch_get_main_queue(),
-                   ^{
-                       NSLog(@"hello2");
-                       
-                   });
+    [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)7.0]];
+    NSLog(@"hello2 after 7 s");
+//    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
+//                   , dispatch_get_main_queue(),
+//                   ^{
+//                       NSLog(@"hello2");
+//                       
+//                   });
     
     //[NSThread exit];
     //[pool realese];
