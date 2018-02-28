@@ -17,14 +17,9 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
         NSLog(@"Hello, World of threads!");
-        
-            //NSLog(@"aaa %d",nr_int);
+              
         while(1){
-                        
-//            dispatch_after_f(thread_instance.DelayTime, dispatch_get_main_queue(), NULL, [thread_instance ShowSecondsDuringWaiting]);
             
-            //printf(" seconds %d",nr_int);
-            //NSLog(@" still ");
             dispatch_main();
         }
         

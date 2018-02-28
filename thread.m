@@ -30,7 +30,7 @@
     NSLog(@"hello");
     
     [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)7.0]];
-    NSLog(@"hello2 after 7 s");
+    NSLog(@"\n hello2 after 7 s \n");
 //    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
 //                   , dispatch_get_main_queue(),
 //                   ^{
