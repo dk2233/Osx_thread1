@@ -11,6 +11,8 @@
 
 
 #define DELAY_IN_SECONDS   1
+#define HOW_LONG_FIRST      5
+#define HOW_LONG_SECOND      10
 
 
 @interface MyClass_thread : NSObject
