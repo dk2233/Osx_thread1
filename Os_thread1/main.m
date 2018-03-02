@@ -13,16 +13,21 @@
 int main(int argc, const char * argv[]) {
     
     
-    MyClass_thread  *thread_instance = [[MyClass_thread alloc] init];
     @autoreleasepool {
+        MyClass_thread  *thread_instance = [[MyClass_thread alloc] init];
         
-        NSLog(@"Hello, World of threads!");
+        NSLog(@"Hello, World of threads! - he");
               
-        while(1){
+        //while(thread_instance.seconds < (HOW_LONG_SECOND-1) )
+        //{
             
-            dispatch_main();
-        }
-        
+        dispatch_main();
+                        
+        //}
+        //dispatch_wait(, <#timeout#>)
+        NSLog(@"\n finish \n ");
+        dispatch_suspend(thread_instance.MyQueue);
+        //dispatch_q
+        return 0;
     }
-    return 0;
 }

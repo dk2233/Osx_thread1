@@ -19,6 +19,8 @@
 
 @property  int seconds;
 @property  dispatch_time_t DelayTime;
+@property  dispatch_queue_t MyQueue;
+
 -(id)init;
 -(void)WriteSthg;
 -(void)ShowSecondsDuringWaiting;
