@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "thread.h"
+#import "limits.h"
 
 dispatch_block_t SimpleBlock;
 dispatch_block_t NotificationBlock;
@@ -26,12 +27,20 @@ dispatch_block_t NotificationBlock;
     [self ShowSecondsDuringWaiting];
     //[NSThread detachNewThreadSelector:@selector(WriteSthg) toTarget:self withObject:self];
     
+    _newtask = [[NSTask alloc] init];
+    
+//    [_newtask setLaunchPath:@"/Applications/MacVim.app/Contents/bin/gvim"];
+    [_newtask setLaunchPath:@"/Applications/Utilities/System Information.app/Contents/MacOS/System Information"];
+//    [_newtask setLaunchPath:@"/usr/bin/vim"];
     _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
 //DISPATCH_QUEUE_CONCURRENT
     dispatch_async(_MyQueue, ^{
         NSLog(@"\n I am on MyQueue \n");
     });
     
+    
+    
+    //here is an example of dispatch_block creation
     NotificationBlock = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
         NSLog(@"\n finished \n\n");
         NSLog(@" queue %@ ",_MyQueue);
@@ -49,6 +58,34 @@ dispatch_block_t NotificationBlock;
     
     dispatch_block_notify(SimpleBlock, _MyQueue, NotificationBlock);
 
+    
+    dispatch_async(_MyQueue, ^{
+        for(int64_t i=0; i< INTMAX_MAX;i++)
+        {
+            ;
+        }
+        NSLog(@"Finished very long One ");
+        
+    });
+    
+    dispatch_async(_MyQueue, ^{
+        
+        [_newtask launch];
+        
+        
+    });
+    
+    Time1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC));
+    dispatch_after(Time1, _MyQueue, ^{
+        NSLog(@"zamykam");
+       [_newtask terminate];
+        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)1.0]];
+        NSLog(@"status : %d",[_newtask terminationStatus]);
+        NSLog(@" running ? %@",([_newtask isRunning] ? @"Run":@"Stopped "));
+        
+        
+    });
+    
     return self;
     
 }
@@ -86,6 +123,9 @@ dispatch_block_t NotificationBlock;
     }
     else
     {
+        
+        NSLog(@"\n finish \n ");
+        
         exit(0);
     }
 }

@@ -20,6 +20,7 @@
 @property  int seconds;
 @property  dispatch_time_t DelayTime;
 @property  dispatch_queue_t MyQueue;
+@property  NSTask *newtask;
 
 -(id)init;
 -(void)WriteSthg;
