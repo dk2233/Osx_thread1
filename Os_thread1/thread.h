@@ -21,6 +21,8 @@
 @property  dispatch_time_t DelayTime;
 @property  dispatch_queue_t MyQueue;
 @property  NSTask *newtask;
+@property  dispatch_group_t MyGroup;
+
 
 -(id)init;
 -(void)WriteSthg;

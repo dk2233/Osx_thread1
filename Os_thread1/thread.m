@@ -28,14 +28,17 @@ dispatch_block_t NotificationBlock;
     
     
     _newtask = [[NSTask alloc] init];
+    dispatch_group_t _MyGroup = dispatch_group_create();
+    _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
+    
+    
     
 //    [_newtask setLaunchPath:@"/Applications/MacVim.app/Contents/bin/gvim"];
     [_newtask setLaunchPath:@"/Applications/Utilities/System Information.app/Contents/MacOS/System Information"];
 //    [_newtask setLaunchPath:@"/usr/bin/vim"];
-    
-    _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
-//DISPATCH_QUEUE_CONCURRENT
-    dispatch_async(_MyQueue, ^{
+    [_newtask launch];
+
+    dispatch_group_async(_MyGroup, _MyQueue, ^{
         NSLog(@"\n I am on MyQueue \n");
     });
     
@@ -53,13 +56,15 @@ dispatch_block_t NotificationBlock;
     });
     
     
+    
     dispatch_time_t Time1;
     Time1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((HOW_LONG_FIRST) * NSEC_PER_SEC));
+    
     dispatch_after(Time1, _MyQueue, SimpleBlock);
     
     dispatch_block_notify(SimpleBlock, _MyQueue, NotificationBlock);
     
-    dispatch_async(_MyQueue, ^{
+    dispatch_group_async(_MyGroup ,_MyQueue, ^{
         for(int64_t i=0; i< INTMAX_MAX;i++)
         {
             ;
@@ -68,30 +73,36 @@ dispatch_block_t NotificationBlock;
         
     });
     
-    dispatch_async(_MyQueue, ^{
-        
-        [_newtask launch];
-        
-        
-    });
     
     Time1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC));
     dispatch_after(Time1, _MyQueue, ^{
-        NSLog(@"zamykam");
-       [_newtask terminate];
-        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)1.0]];
-        NSLog(@"status : %d",[_newtask terminationStatus]);
         NSLog(@" running ? %@",([_newtask isRunning] ? @"Run":@"Stopped "));
-        
+
         
     });
+    
+    
+    /* This is very important to prepare it differentyl than
+     simply with async functionality
+     */
+    dispatch_group_enter(_MyGroup);
+    
+    NSLog(@" I am waiting...");
+    [_newtask waitUntilExit];
+    NSLog(@" I am waiting... 22");
+    dispatch_group_leave( _MyGroup );
+    
+    dispatch_group_notify(_MyGroup, _MyQueue, ^{
+        exit(0);
+    });
+    
     
     return self;
     
 }
 -(void)WriteSthg{
     
-
+    
     NSLog(@"hello");
     
     [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)HOW_LONG_SECOND]];
@@ -102,9 +113,6 @@ dispatch_block_t NotificationBlock;
                        NSLog(@"hello2");
                        
                    });
-    
-//    [NSThread exit];
-//    [pool realese];
 }
 
 -(void)ShowSecondsDuringWaiting{
@@ -123,10 +131,10 @@ dispatch_block_t NotificationBlock;
     }
     else
     {
-        
         NSLog(@"\n finish \n ");
         
-        exit(0);
+        NSLog(@" stoppped all ");
+        
     }
 }
 
