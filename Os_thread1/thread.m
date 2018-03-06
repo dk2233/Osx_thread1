@@ -23,15 +23,16 @@ dispatch_block_t NotificationBlock;
 
 -(id)init{
     _seconds = 0;
-    //_DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_IN_SECONDS * NSEC_PER_SEC));
+    
     [self ShowSecondsDuringWaiting];
-    //[NSThread detachNewThreadSelector:@selector(WriteSthg) toTarget:self withObject:self];
+    
     
     _newtask = [[NSTask alloc] init];
     
 //    [_newtask setLaunchPath:@"/Applications/MacVim.app/Contents/bin/gvim"];
     [_newtask setLaunchPath:@"/Applications/Utilities/System Information.app/Contents/MacOS/System Information"];
 //    [_newtask setLaunchPath:@"/usr/bin/vim"];
+    
     _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
 //DISPATCH_QUEUE_CONCURRENT
     dispatch_async(_MyQueue, ^{
@@ -44,7 +45,7 @@ dispatch_block_t NotificationBlock;
     NotificationBlock = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
         NSLog(@"\n finished \n\n");
         NSLog(@" queue %@ ",_MyQueue);
-//        dispatch_release(_MyQueue);
+
     });
     
     SimpleBlock = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
@@ -57,7 +58,6 @@ dispatch_block_t NotificationBlock;
     dispatch_after(Time1, _MyQueue, SimpleBlock);
     
     dispatch_block_notify(SimpleBlock, _MyQueue, NotificationBlock);
-
     
     dispatch_async(_MyQueue, ^{
         for(int64_t i=0; i< INTMAX_MAX;i++)
@@ -91,20 +91,20 @@ dispatch_block_t NotificationBlock;
 }
 -(void)WriteSthg{
     
-    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
     NSLog(@"hello");
     
     [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)HOW_LONG_SECOND]];
     NSLog(@"\n hello2 after %d s \n",HOW_LONG_SECOND);
-//    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
-//                   , dispatch_get_main_queue(),
-//                   ^{
-//                       NSLog(@"hello2");
-//                       
-//                   });
+    dispatch_after( dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC) )
+                   , dispatch_get_main_queue(),
+                   ^{
+                       NSLog(@"hello2");
+                       
+                   });
     
-    //[NSThread exit];
-    //[pool realese];
+//    [NSThread exit];
+//    [pool realese];
 }
 
 -(void)ShowSecondsDuringWaiting{
