@@ -84,6 +84,10 @@ dispatch_block_t NotificationBlock;
         
         self.seconds += 1;
     }
+    else
+    {
+        exit(0);
+    }
 }
 
 
