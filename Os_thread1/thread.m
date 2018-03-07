@@ -77,8 +77,6 @@ dispatch_block_t NotificationBlock;
     Time1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC));
     dispatch_after(Time1, _MyQueue, ^{
         NSLog(@" running ? %@",([_newtask isRunning] ? @"Run":@"Stopped "));
-
-        
     });
     
     
@@ -95,6 +93,28 @@ dispatch_block_t NotificationBlock;
     dispatch_group_notify(_MyGroup, _MyQueue, ^{
         exit(0);
     });
+    
+    
+    dispatch_group_async(_MyGroup, _MyQueue, ^{
+        NSLog(@"now is %d seconds ",_seconds);
+        
+        if (self.seconds < HOW_LONG_SECOND)
+        {
+            _DelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)((DELAY_IN_SECONDS) * NSEC_PER_SEC));
+            dispatch_after(_DelayTime, MyQueue(), ^{
+                [self ShowSecondsDuringWaiting];
+            });
+            
+            self.seconds += 1;
+        }
+        else
+        {
+            NSLog(@"\n finish \n ");
+            
+            NSLog(@" stoppped all ");
+            
+        }
+    })
     
     
     return self;
@@ -118,7 +138,6 @@ dispatch_block_t NotificationBlock;
 -(void)ShowSecondsDuringWaiting{
     
     NSLog(@"now is %d seconds ",_seconds);
-    
     
     if (self.seconds < HOW_LONG_SECOND)
     {
