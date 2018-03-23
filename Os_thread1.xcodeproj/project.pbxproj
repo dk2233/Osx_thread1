@@ -98,6 +98,8 @@
 				TargetAttributes = {
 					65EAED9A20399C1F007C7A2F = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = YURMR997RR;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -232,14 +234,20 @@
 		65EAEDA320399C1F007C7A2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = YURMR997RR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
 		65EAEDA420399C1F007C7A2F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = YURMR997RR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
