@@ -26,18 +26,23 @@ dispatch_block_t NotificationBlock;
     
     [self ShowSecondsDuringWaiting];
     
-    
+    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     _newtask = [[NSTask alloc] init];
+    #endif
     dispatch_group_t _MyGroup = dispatch_group_create();
     _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
     
     
     
 //    [_newtask setLaunchPath:@"/Applications/MacVim.app/Contents/bin/gvim"];
+    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     [_newtask setLaunchPath:@"/Applications/Utilities/System Information.app/Contents/MacOS/System Information"];
+    
 //    [_newtask setLaunchPath:@"/usr/bin/vim"];
     [_newtask launch];
-
+    #endif
+    
+    
     dispatch_group_async(_MyGroup, _MyQueue, ^{
         NSLog(@"\n I am on MyQueue \n");
     });
@@ -76,8 +81,9 @@ dispatch_block_t NotificationBlock;
     
     Time1 = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC));
     dispatch_after(Time1, _MyQueue, ^{
+        #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
         NSLog(@" running ? %@",([_newtask isRunning] ? @"Run":@"Stopped "));
-
+#endif
         
     });
     
@@ -88,7 +94,9 @@ dispatch_block_t NotificationBlock;
     dispatch_group_enter(_MyGroup);
     
     NSLog(@" I am waiting...");
+    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     [_newtask waitUntilExit];
+#endif
     NSLog(@" I am waiting... 22");
     dispatch_group_leave( _MyGroup );
     
