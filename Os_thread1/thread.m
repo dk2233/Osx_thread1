@@ -18,45 +18,51 @@ dispatch_block_t NotificationBlock;
 @implementation  MyClass_thread
 
 
-
-
-
 -(id)init{
     _seconds = 0;
     
     [self ShowSecondsDuringWaiting];
     
-    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
+ 
+    NSLog(@" target iphone = %d \n target OSX %d",
+          TARGET_OS_IPHONE,
+          TARGET_OS_OSX);
+    
+#if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     _newtask = [[NSTask alloc] init];
-    #endif
-    dispatch_group_t _MyGroup = dispatch_group_create();
     _MyQueue =  dispatch_queue_create("TestQueue", DISPATCH_QUEUE_SERIAL);
-    
-    
-    
-//    [_newtask setLaunchPath:@"/Applications/MacVim.app/Contents/bin/gvim"];
-    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     [_newtask setLaunchPath:@"/Applications/Utilities/System Information.app/Contents/MacOS/System Information"];
-    
-//    [_newtask setLaunchPath:@"/usr/bin/vim"];
     [_newtask launch];
-    #endif
     
+    
+#elif TARGET_OS_IPHONE==TRUE && TARGET_OS_OSX== False
+//    there is not NSTask in iOS
+    //_MyQueue = dispatch_get_main_queue();
+    _MyQueue = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);
+    NSLog(@" Main Queue ");
+    
+    
+#endif
+    _MyGroup = dispatch_group_create();
+    if (_MyGroup == NULL) {
+        //sthg wrong
+        
+        exit(0);
+    }
     
     dispatch_group_async(_MyGroup, _MyQueue, ^{
         NSLog(@"\n I am on MyQueue \n");
     });
     
-    
-    
     //here is an example of dispatch_block creation
-    NotificationBlock = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
+    NotificationBlock = dispatch_block_create(DISPATCH_BLOCK_DETACHED, ^{
         NSLog(@"\n finished \n\n");
         NSLog(@" queue %@ ",_MyQueue);
+        //[view.text setText:@"\n finished \n\n"];
 
     });
     
-    SimpleBlock = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
+    SimpleBlock = dispatch_block_create(DISPATCH_BLOCK_DETACHED, ^{
         NSLog(@" I am on queue called %@",[NSString stringWithUTF8String:dispatch_queue_get_label(_MyQueue)]);
     });
     
@@ -94,13 +100,14 @@ dispatch_block_t NotificationBlock;
     dispatch_group_enter(_MyGroup);
     
     NSLog(@" I am waiting...");
-    #if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
+#if TARGET_OS_OSX && !defined(TARGET_OS_IPHONE)
     [_newtask waitUntilExit];
 #endif
     NSLog(@" I am waiting... 22");
     dispatch_group_leave( _MyGroup );
     
     dispatch_group_notify(_MyGroup, _MyQueue, ^{
+        NSLog(@" exiting ");
         exit(0);
     });
     
@@ -126,6 +133,9 @@ dispatch_block_t NotificationBlock;
 -(void)ShowSecondsDuringWaiting{
     
     NSLog(@"now is %d seconds ",_seconds);
+    
+#if TARGET_OS_IPHONE
+#endif
     
     
     if (self.seconds < HOW_LONG_SECOND)
